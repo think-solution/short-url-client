@@ -1,1 +1,6 @@
-<p>processor works!</p>
+<div class="col-md-12" [ngStyle]="{'padding-top':'4em'}">
+    <input type="text" [(ngModel)]="url" class="form-control"/><button (click)="shortenUrl()" mat-fab extended>
+        <mat-icon>arrow_right_alt</mat-icon>
+      </button>
+    <div>{{url}}</div>
+</div>

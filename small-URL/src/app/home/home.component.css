@@ -1,0 +1,10 @@
+h1{
+    color: darkgreen;
+    font-weight: bold;
+}
+
+p{
+    font-weight: bold;
+    font-size: medium;
+    display: inline-block;
+}

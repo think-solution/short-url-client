@@ -1,0 +1,10 @@
+input{
+    text-align: center;
+    display: inline;
+    width: 40%;
+    height: 5rem;
+}
+
+button{
+    margin-left: 1em;
+}
