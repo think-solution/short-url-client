@@ -19,7 +19,7 @@ jobs:
       id-token: write   # to verify the deployment originates from an appropriate source
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
