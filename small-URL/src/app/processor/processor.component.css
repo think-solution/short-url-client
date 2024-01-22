@@ -8,3 +8,15 @@ input{
 button{
     margin-left: 1em;
 }
+
+#generatedURL{
+    border-color:darkolivegreen;
+    border-style: solid;
+    width: 45%;
+    height: 9rem;
+    margin-top: 3em;
+    margin-left: 27%;
+    text-align: center;
+    padding-top: 1em;
+    border-radius: 5px;
+}

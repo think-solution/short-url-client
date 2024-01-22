@@ -1,6 +1,17 @@
 <div class="col-md-12" [ngStyle]="{'padding-top':'4em'}">
-    <input type="text" [(ngModel)]="url" class="form-control"/><button (click)="shortenUrl()" mat-fab extended>
-        <mat-icon>arrow_right_alt</mat-icon>
-      </button>
-    <div>{{url}}</div>
+  <form (submit)="$event.preventDefault()">
+    <input matInput cdkTextareaAutosize 
+           name="url" [(ngModel)]="url" 
+           placeholder="Enter your URL and hit GO!" 
+           cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"/>
+    <button (click)="shortenUrl()" mat-fab extended>
+      <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='Go!'>arrow_right_alt</mat-icon>
+    </button>
+  </form>
+  <div id='generatedURL' *ngIf = "smallURL !== ''">
+    <span [ngStyle]="{'font-style':'italic'}">Here is your Small URL: &nbsp;&nbsp;</span><span [ngStyle]="{'font-weight':'bold'}">{{smallURL}}</span>
+    <button color="green" [cdkCopyToClipboard]="smallURL" mat-fab extended (click)="this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000})">
+      <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='Copy to clipboard'>content_copy</mat-icon>
+    </button>
+  </div>
 </div>

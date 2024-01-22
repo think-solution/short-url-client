@@ -6,10 +6,14 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { AccountComponent } from './account/account.component';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { ProcessorComponent } from './processor/processor.component';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -25,12 +29,16 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatIconModule,
-    MatTooltipModule,
     MatButtonModule,
     BrowserAnimationsModule,
+    CdkAccordionModule,
+    ClipboardModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSnackBarModule,
+    MatTableModule,
+    MatTooltipModule,
     FormsModule,
-    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

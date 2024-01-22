@@ -1,3 +1,23 @@
+<div class="pull-right" [ngStyle]="{'margin-right':'1em'}">
+    <button mat-fab extended [matMenuTriggerFor]="menu">
+        <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='User Account'>account_circle</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>account_box</mat-icon>
+          <span>Sign-in with Google</span>
+        </button>
+        <button mat-menu-item routerLink="account">
+          <mat-icon>assessment</mat-icon>
+          <span>Account</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>input</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+</div>
+
 <div class="text-center">
     <h1>SmallURL</h1>
     <br>
@@ -6,12 +26,13 @@
     <br>
     <p>Create a FREE account with us and get FREE statistics on visits to your website.</p><mat-icon matTooltipClass="example-tooltip-uppercase" 
                                                                                                      matTooltip='We offer location, device and other data for your URL.'
-                                                                                                     [ngStyle]="{'line-height':'1.8','font-size': '1.35em'}">info</mat-icon>
+                                                                                                     [ngStyle]="{'line-height':'1.8','font-size': '1.35em', 'color':'rgb(34, 34, 196)'}">
+                                                                                                     info</mat-icon>
     <br>
     <app-processor></app-processor>
 </div>
-<app-login></app-login>
-<app-account></app-account>
+<!-- <app-login></app-login>
+<app-account></app-account> -->
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
