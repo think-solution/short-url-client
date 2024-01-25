@@ -8,8 +8,10 @@ import { LoginComponent } from './login/login.component';
 import { AccountComponent } from './account/account.component';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { HttpClientModule } from '@angular/common/http';
 import { ProcessorComponent } from './processor/processor.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -29,10 +31,12 @@ import { FormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatButtonModule,
     BrowserAnimationsModule,
     CdkAccordionModule,
     ClipboardModule,
+    HttpClientModule,
+    MatButtonModule,
+    MatCardModule,
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,

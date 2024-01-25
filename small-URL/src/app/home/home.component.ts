@@ -10,6 +10,10 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if(window.location.href.includes('jwt')){
+      var jwt = new URLSearchParams(window.location.search).get('jwt');
+      localStorage.setItem('jwt', jwt);
+    }
   }
 
 }
