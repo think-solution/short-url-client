@@ -114,7 +114,7 @@
         [style.display]="accordionItem.expanded ? '' : 'none'"
         [attr.id]="accordion-body-0"
         [attr.aria-labelledby]="accordion-header-0">
-          <table mat-table [dataSource]="this.userAnalyticsInfo.sessions">
+          <table mat-table [dataSource]="this.userAnalyticsData.sessions">
             <!--Position Column-->
             <ng-container matColumnDef="position">
               <th mat-header-cell *matHeaderCellDef>No.</th>

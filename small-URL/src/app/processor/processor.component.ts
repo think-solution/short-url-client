@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ProcessURLService } from '../services/process-url.service';
+import { GeneratedSmallUrl } from './generated-url';
 
 @Component({
   selector: 'app-processor',
@@ -29,9 +30,9 @@ export class ProcessorComponent implements OnInit {
       this.errorMsg='Please enter the URL in the correct format'
       this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
     } else {
-      this.processURLService.generateSmallURL(this.url).then((retVal) => {
-        this.smallURL = retVal;
-        this.clipboard.copy(retVal);
+      this.processURLService.generateSmallURL(this.url).then((retVal : GeneratedSmallUrl) => {
+        this.smallURL = retVal.callUrl;
+        this.clipboard.copy(retVal.callUrl);
         this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000});
       }).catch((e)=>{
         this.errorMsg='An unfortunate error occured generating the URL.'

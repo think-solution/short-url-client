@@ -37,5 +37,9 @@ export class LoginService {
 
   public logOut() : void {
     localStorage.removeItem('jwt');
+    if(window.location.href.includes('jwt')){
+      window.history.pushState({}, document.title, window.location.pathname);
+    }
+    window.location.reload();
   }
 }
