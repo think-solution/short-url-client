@@ -11,7 +11,6 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { HttpClientModule } from '@angular/common/http';
 import { ProcessorComponent } from './processor/processor.component';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -36,7 +35,6 @@ import { FormsModule } from '@angular/forms';
     ClipboardModule,
     HttpClientModule,
     MatButtonModule,
-    MatCardModule,
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,

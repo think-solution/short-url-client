@@ -3,7 +3,7 @@
         <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='User Account'>account_circle</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="login">
+        <button mat-menu-item routerLink="login" *ngIf="!loggedIn">
           <mat-icon>account_box</mat-icon>
           <span>Sign-in with Google</span>
         </button>
@@ -11,7 +11,7 @@
           <mat-icon>assessment</mat-icon>
           <span>Account</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item *ngIf="loggedIn" (click)="logOut()">
           <mat-icon>input</mat-icon>
           <span>Logout</span>
         </button>
@@ -19,10 +19,10 @@
 </div>
 
 <div class="text-center">
-    <h1>SmallURL</h1>
+    <h1>KutieURL</h1>
     <br>
     <br>
-    <p>Welcome to SmallURL. Get your URL shortened for absolutely FREE!</p>
+    <p>Welcome to KutieURL. Get your URL shortened for absolutely FREE!</p>
     <br>
     <p>Create a FREE account with us and get FREE statistics on visits to your website.</p><mat-icon matTooltipClass="example-tooltip-uppercase" 
                                                                                                      matTooltip='We offer location, device and other data for your URL.'

@@ -11,8 +11,12 @@ export class LoginService {
 
   public checkLogin() : Promise<{}> {
     const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.checkLogin;
+    const jwt = localStorage.getItem('jwt');
+    if(!jwt){
+      return null;
+    }
     const headers = new HttpHeaders().set('Content-Type','application.json')
-                                      .set('Authorization', 'Bearer ' + localStorage.getItem('jwt'));
+                                      .set('Authorization', 'Bearer ' + jwt);
     return new Promise((resolve, reject) => {
       this.http.get(url, {headers:headers})
       .subscribe({
@@ -29,5 +33,9 @@ export class LoginService {
         })
       })
     });
+  }
+
+  public logOut() : void {
+    localStorage.removeItem('jwt');
   }
 }

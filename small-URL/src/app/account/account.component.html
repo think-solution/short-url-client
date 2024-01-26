@@ -1,5 +1,5 @@
 <div class="pull-left">
-    <h2><a routerLink="">SmallURL</a></h2>
+    <h2><a routerLink="">KutieURL</a></h2>
 </div>
 
 <div class="pull-right" [ngStyle]="{'margin-right':'1em', 'margin-top':'1em'}">
@@ -11,11 +11,11 @@
           <mat-icon>home</mat-icon>
           <span>Home</span>
         </button>
-        <button mat-menu-item routerLink="/login">
+        <button mat-menu-item routerLink="/login" *ngIf="!loggedIn">
           <mat-icon>account_box</mat-icon>
           <span>Sign-in with Google</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item *ngIf="loggedIn" (click)="logOut()">
           <mat-icon>input</mat-icon>
           <span>Logout</span>
         </button>

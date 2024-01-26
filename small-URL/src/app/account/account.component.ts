@@ -24,20 +24,21 @@ export class AccountComponent implements OnInit {
   userURLData;
   userURLDataColumns: string[] = ['position', 'date', 'deviceType', 'client', 'ip', 'location', 'coordinates'];
   userAnalyticsInfo = {};
-  //name: string = 'Jana';
 
   constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar, private loginService : LoginService) { }
 
   ngOnInit(): void {
     var loginInfo = this.loginService.checkLogin();
-    console.log('Login Info: ' + loginInfo);
-    if(loginInfo){
-      this.loggedIn = true;
-      console.log('Login: ' + this.loggedIn);
-    }
+    this.loggedIn = loginInfo ? true : false;
     if(this.loggedIn){
       this.getUrlDetails();
     }
+  }
+
+  public logOut() : void {
+    this.loginService.logOut();
+    var loginInfo = this.loginService.checkLogin();
+    this.loggedIn = loginInfo ? true : false;
   }
 
   async getUrlDetailsSimple(){

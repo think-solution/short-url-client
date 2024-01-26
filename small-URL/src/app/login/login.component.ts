@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { URL_CONSTANTS } from '../shared/URLConstants';
 
 
@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    window.location.href=this.loginURL;
   }
 
 }
