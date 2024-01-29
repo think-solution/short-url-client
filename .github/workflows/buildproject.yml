@@ -41,7 +41,7 @@ jobs:
           export NODE_PATH="./small-URL/src"
           export CI=false
           cd ./small-URL
-          npm install
+          npm install --production
           npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
