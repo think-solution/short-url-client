@@ -14,9 +14,9 @@ export class ProcessURLService {
     const endpointUrl = URL_CONSTANTS.baseURL + URL_CONSTANTS.addUrl;
     const payload = {'url' : url};
     const jwt = localStorage.getItem('jwt');
-    const headers = new HttpHeaders().set('Content-Type','application/json');
-    if(jwt){
-      headers.set('Authorization', 'Bearer ' + jwt);
+    const headers = new HttpHeaders().set('Content-Type','application/json').set('Authorization', 'Bearer ' + jwt);
+    if(!jwt){
+      headers.delete('Authorization');
     }
     return new Promise((resolve,reject) => {
       this.http.post(endpointUrl, payload, {headers:headers})

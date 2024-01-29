@@ -32,6 +32,7 @@ export class ProcessorComponent implements OnInit {
     } else {
       this.processURLService.generateSmallURL(this.url).then((retVal : GeneratedSmallUrl) => {
         this.smallURL = retVal.callUrl;
+        this.url = '';
         this.clipboard.copy(retVal.callUrl);
         this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000});
       }).catch((e)=>{

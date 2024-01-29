@@ -1,12 +1,15 @@
-<div class="pull-left">
-    <h2><a routerLink="">KutieURL</a></h2>
+<div class="text-center">
+    <h2><a routerLink="">Kutie URL</a></h2>
 </div>
 
-<div class="pull-right" [ngStyle]="{'margin-right':'1em', 'margin-top':'1em'}">
-    <button mat-fab extended [matMenuTriggerFor]="menu">
+<div class="pull-right" [ngStyle]="{'margin-right':'1em'}">
+    <button mat-fab extended [matMenuTriggerFor]="menu" (click)="removeOverflow()">
         <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='User Account'>account_circle</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+        <span mat-menu-item  *ngIf="userFirstName && userFirstName.length > 0">
+          <p [ngStyle]="{'font-style':'italic'}">Hi {{userFirstName}}!</p>
+        </span>
         <button mat-menu-item routerLink="">
           <mat-icon>home</mat-icon>
           <span>Home</span>
@@ -23,14 +26,14 @@
 </div>
 
 
-<div *ngIf="!loggedIn" [ngStyle]="{'padding-top':'10em', 'padding-left':'10em'}">
-  <form (submit)="$event.preventDefault()">
+<div *ngIf="!loggedIn" [ngStyle]="{'padding-top':'3em'}" class="text-center">
+  <form (submit)="$event.preventDefault()" [ngStyle]="{'padding-left':'5em'}">
     <input matInput cdkTextareaAutosize 
            name="url" [(ngModel)]="smallUrl" 
-           placeholder="Enter your URL and hit Get!" 
+           placeholder="Enter your Kutie URL Short Code and hit Get Details!" 
            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"/>
     <button (click)="getUrlDetailsSimple()" mat-fab extended>
-      <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='Get!'>motorcycle</mat-icon>
+      <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='Get!'>arrow_right_alt</mat-icon>
     </button>
   </form>
   <div *ngIf="urlData && displayGrid" [ngStyle]="{'padding-top':'2em'}">
@@ -50,7 +53,7 @@
           </span>
         </h4><br/>
         <span [ngStyle]="{'font-weight':'bold'}">Short Code: </span> {{this.urlData.shortCode}} <br/>
-        <span [ngStyle]="{'font-weight':'bold'}">Small URL Expired: </span> {{this.urlData.isExpired}} <br/>
+        <span [ngStyle]="{'font-weight':'bold'}">Kutie URL Expired: </span> {{this.urlData.isExpired}} <br/>
         <span [ngStyle]="{'font-weight':'bold'}">Total Clicks: </span> {{this.urlData.totalClicks}} <br/>
         <span [ngStyle]="{'font-weight':'bold'}">Created On: </span> {{this.urlData.createdAt}}
       </div>
@@ -59,28 +62,31 @@
         [style.display]="accordionItem.expanded ? '' : 'none'"
         [attr.id]="accordion-body-0"
         [attr.aria-labelledby]="accordion-header-0">
-          <table mat-table [dataSource]="this.urlData.clicksPerday">
-            <!--Position Column-->
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef>No.</th>
-              <td mat-cell *matCellDef="let index=index">{{index+1}}</td>
-          </ng-container>
-
-           <!--Date Column-->
-           <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Date</th>
-            <td mat-cell *matCellDef="let element">{{element.date}}</td>
-          </ng-container>
-
-          <!--Count Column-->
-          <ng-container matColumnDef="count">
-            <th mat-header-cell *matHeaderCellDef>Count</th>
-            <td mat-cell *matCellDef="let element">{{element.count}}</td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="urlDataColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: urlDataColumns;"></tr>
-          </table>
+          <div *ngIf="this.urlData.clicksPerday && this.urlData.clicksPerday.length > 0; else elseBlockLogout">
+            <table mat-table [dataSource]="this.urlData.clicksPerday">
+              <!--Position Column-->
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>No.</th>
+                <td mat-cell *matCellDef="let index=index">{{index+1}}</td>
+            </ng-container>
+  
+             <!--Date Column-->
+             <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let element">{{element.date}}</td>
+            </ng-container>
+  
+            <!--Count Column-->
+            <ng-container matColumnDef="count">
+              <th mat-header-cell *matHeaderCellDef>Count</th>
+              <td mat-cell *matCellDef="let element">{{element.count}}</td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="urlDataColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: urlDataColumns;"></tr>
+            </table>
+          </div>
+          <ng-template #elseBlockLogout><p>No details to display (YET) ! Get started now with Kutie URL!</p></ng-template>
         </div>
       </cdk-accordion-item>
     </cdk-accordion>
@@ -88,7 +94,7 @@
 </div>
 
 <div *ngIf="loggedIn" [ngStyle]="{'padding-top':'10em', 'padding-left':'10em'}">
-  <div *ngIf="userURLData.length != 0 && displayGrid" [ngStyle]="{'padding-top':'2em'}">
+  <div *ngIf="userURLData && userURLData.length != 0 && displayGrid" [ngStyle]="{'padding-top':'2em'}">
     <cdk-accordion class="example-accordion-detailed">
       <cdk-accordion-item
       #accordionItem="cdkAccordionItem"
@@ -114,52 +120,56 @@
         [style.display]="accordionItem.expanded ? '' : 'none'"
         [attr.id]="accordion-body-0"
         [attr.aria-labelledby]="accordion-header-0">
-          <table mat-table [dataSource]="this.userAnalyticsData.sessions">
-            <!--Position Column-->
-            <ng-container matColumnDef="position">
-              <th mat-header-cell *matHeaderCellDef>No.</th>
-              <td mat-cell *matCellDef="let index=index">{{index+1}}</td>
-          </ng-container>
+          <div *ngIf="this.userAnalyticsData.sessions && this.userAnalyticsData.sessions.length > 0; else elseBlockLogin">
+            <span class="pull-right"><button mat-raised-button color="primary" (click)="downloadData(item.id)">Download Data</button></span>
+            <table mat-table [dataSource]="this.userAnalyticsData.sessions">
+              <!--Position Column-->
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>No.</th>
+                <td mat-cell *matCellDef="let index=index">{{index+1}}</td>
+            </ng-container>
 
-           <!--Date Column-->
-           <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Date</th>
-            <td mat-cell *matCellDef="let element">{{element.createdAt}}</td>
-          </ng-container>
+            <!--Date Column-->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let element">{{element.createdAt}}</td>
+            </ng-container>
 
-          <!--Device Type Column-->
-          <ng-container matColumnDef="deviceType">
-            <th mat-header-cell *matHeaderCellDef>Device Type-OS</th>
-            <td mat-cell *matCellDef="let element">{{element.device_type}}-{{element.os_family}}</td>
-          </ng-container>
+            <!--Device Type Column-->
+            <ng-container matColumnDef="deviceType">
+              <th mat-header-cell *matHeaderCellDef>Device Type-OS</th>
+              <td mat-cell *matCellDef="let element">{{element.device_type}}-{{element.os_family}}</td>
+            </ng-container>
 
-          <!--Client Column-->
-          <ng-container matColumnDef="client">
-            <th mat-header-cell *matHeaderCellDef>Client Type-Name</th>
-            <td mat-cell *matCellDef="let element">{{element.client_type}}-{{element.client_name}}</td>
-          </ng-container>
+            <!--Client Column-->
+            <ng-container matColumnDef="client">
+              <th mat-header-cell *matHeaderCellDef>Client Type-Name</th>
+              <td mat-cell *matCellDef="let element">{{element.client_type}}-{{element.client_name}}</td>
+            </ng-container>
 
-          <!--IP Column-->
-          <ng-container matColumnDef="ip">
-            <th mat-header-cell *matHeaderCellDef>IP Address</th>
-            <td mat-cell *matCellDef="let element">{{element.ipAddress}}</td>
-          </ng-container>
+            <!--IP Column-->
+            <ng-container matColumnDef="ip">
+              <th mat-header-cell *matHeaderCellDef>IP Address</th>
+              <td mat-cell *matCellDef="let element">{{element.ipAddress}}</td>
+            </ng-container>
 
-          <!--Location Column-->
-          <ng-container matColumnDef="location">
-            <th mat-header-cell *matHeaderCellDef>Location</th>
-            <td mat-cell *matCellDef="let element">{{element.city}}/{{element.region}}/{{element.country}}</td>
-          </ng-container>
+            <!--Location Column-->
+            <ng-container matColumnDef="location">
+              <th mat-header-cell *matHeaderCellDef>Location</th>
+              <td mat-cell *matCellDef="let element">{{element.city}}/{{element.region}}/{{element.country}}</td>
+            </ng-container>
 
-          <!--Coordinates Column-->
-          <ng-container matColumnDef="coordinates">
-            <th mat-header-cell *matHeaderCellDef>Latitude/Longitude</th>
-            <td mat-cell *matCellDef="let element">{{element.latitude}}/{{element.longitude}}</td>
-          </ng-container>
+            <!--Coordinates Column-->
+            <ng-container matColumnDef="coordinates">
+              <th mat-header-cell *matHeaderCellDef>Latitude/Longitude</th>
+              <td mat-cell *matCellDef="let element">{{element.latitude}}/{{element.longitude}}</td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="userURLDataColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: userURLDataColumns;"></tr>
-          </table>
+            <tr mat-header-row *matHeaderRowDef="userURLDataColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: userURLDataColumns;"></tr>
+            </table>
+          </div>
+          <ng-template #elseBlockLogin><p>No details to display (YET) ! Get started now with Kutie URL!</p></ng-template>
         </div>
       </cdk-accordion-item>
     </cdk-accordion>

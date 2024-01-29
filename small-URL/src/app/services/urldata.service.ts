@@ -67,7 +67,52 @@ export class URLDataService {
           resolve(res);
         }),
         error: ((err) => {
-          console.log('Error getting user URLs');
+          console.log('Error getting user URLs.');
+          console.log(err);
+          reject();
+        })
+      })
+    })
+  }
+
+  public downloadData(id : number) : Promise<void> {
+    const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.download + id;
+    const jwt = localStorage.getItem('jwt');
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + jwt);
+    //headers.set({responseType: 'text'})
+    return new Promise((resolve,reject) => {
+      if(!jwt){
+        reject();
+      }
+      this.http.get(url, {headers:headers, responseType : 'text'})
+      .subscribe({
+        next:((res) => {
+          if(res) {
+            console.log('URL details successfully fetched for download.');
+            // var blob = new Blob([res], { type: 'text/xml' });
+            // var url= window.URL.createObjectURL(blob);
+            // window.open(url);
+            var blob = new Blob([res],{
+              type:'application/ms-excel'
+            })
+
+            let url = window.URL.createObjectURL(blob);
+            let pwa = window.open(url);
+            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
+                alert( 'Please disable your Pop-up blocker and try again.');
+            }
+            // var url = URL.createObjectURL(blob);
+            // var element = document.createElement('a');
+            // element.href = url;
+            // element.setAttribute('download','file.csv');
+            // document.body.appendChild(element);
+            // element.click();
+            // resolve();
+          }
+          
+        }),
+        error: ((err) => {
+          console.log('Error getting user URLs URL details for download.');
           console.log(err);
           reject();
         })

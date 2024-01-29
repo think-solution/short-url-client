@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { URLDataService } from '../services/urldata.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../services/login.service';
+import { UserDetails } from '../shared/user-details';
 
 @Component({
   selector: 'app-account',
@@ -13,6 +14,7 @@ export class AccountComponent implements OnInit {
   //Common
   loggedIn : boolean = false;
   displayGrid : boolean = false;
+  userFirstName : string = '';
 
 
   //Non-login mode
@@ -27,31 +29,41 @@ export class AccountComponent implements OnInit {
 
   constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar, private loginService : LoginService) { }
 
-  ngOnInit(): void {
-    var loginInfo = this.loginService.checkLogin();
-    this.loggedIn = loginInfo ? true : false;
-    if(this.loggedIn){
-      this.getUrlDetails();
-    }
+  async ngOnInit(): Promise<void> {
+    var loginInfo;
+    await this.loginService.checkLogin().then((res : UserDetails) => {
+      loginInfo = res;
+      this.loggedIn = loginInfo ? true : false;
+      if(this.loggedIn){
+        this.userFirstName = loginInfo.firstName;
+        this.getUrlDetails();
+      }
+    }).catch((e) => {
+      var errorMsg='Unexpected error occured'
+      this.snackBar.open(errorMsg, 'close', {duration: 3000});
+    });
   }
 
   public logOut() : void {
     this.loginService.logOut();
     var loginInfo = this.loginService.checkLogin();
     this.loggedIn = loginInfo ? true : false;
+    if(!this.loggedIn){
+      this.userFirstName = '';
+    }
   }
 
-  async getUrlDetailsSimple(){
-    var expression = '^[a-zA-Z0-9]*';
+  public async getUrlDetailsSimple(){
+    var expression = '/^[a-zA-Z0-9]+$/';
     var regex = new RegExp(expression);
     var errorMsg = '';
     if(this.smallUrl === '') {
       this.displayGrid = false;
-      errorMsg='Please enter URL shortCode to continue';
+      errorMsg='Please enter Kutie URL Short Code to continue';
       this.snackBar.open(errorMsg, 'close', {duration: 3000});
-    } else if(!this.smallUrl.match(regex)){
+    } else if(false){
       this.displayGrid = false;
-      errorMsg='The URL shortcode can only contain numbers and letters'
+      errorMsg='The Kutie URL Short Code can only contain numbers and letters'
       this.snackBar.open(errorMsg, 'close', {duration: 3000});
     } else {
       this.urlData = await this.urlDataService.getUrlDetailsSimple(this.smallUrl)
@@ -72,12 +84,27 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  async getUrlDetails(){
+  public async getUrlDetails(){
     this.displayGrid = true;
     this.userURLData = await this.urlDataService.getUserUrls();
   }
 
-  async getAnalyticsData(id : number){
+  public async getAnalyticsData(id : number){
     this.userAnalyticsData = await this.urlDataService.getUserIdDetails(id);
+  }
+
+  public async downloadData(id : number){
+    await this.urlDataService.downloadData(id).catch((e) => {
+      console.log(e)
+    });
+  }
+
+  public removeOverflow(){
+    var elements = Array.from(document.getElementsByClassName('mat-menu-panel') as HTMLCollectionOf<HTMLElement>);
+    if(elements){
+      elements.forEach((element) => {
+        element.setAttribute('style','overflow:hidden !important')
+      })
+    }
   }
 }

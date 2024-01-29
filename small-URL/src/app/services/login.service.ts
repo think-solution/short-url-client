@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { URL_CONSTANTS } from '../shared/URLConstants';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import { UserDetails } from '../shared/user-details';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,10 @@ export class LoginService {
 
   constructor(private http: HttpClient) { }
 
-  public checkLogin() : Promise<{}> {
+  public checkLogin() : Promise<UserDetails> {
     const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.checkLogin;
     const jwt = localStorage.getItem('jwt');
+    console.log(jwt);
     if(!jwt){
       return null;
     }
@@ -20,7 +22,7 @@ export class LoginService {
     return new Promise((resolve, reject) => {
       this.http.get(url, {headers:headers})
       .subscribe({
-        next:((res) => {
+        next:((res : UserDetails) => {
           if(res){
             console.log('User login verified successfully.');
             resolve(res);
