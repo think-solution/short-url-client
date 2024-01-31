@@ -15,21 +15,25 @@ export class HomeComponent implements OnInit {
   constructor(private loginService : LoginService) { }
 
   async ngOnInit(): Promise<void> {
-    var loginInfo;
-    await this.loginService.checkLogin().then((res : UserDetails) => {
-      loginInfo = res;
-      this.loggedIn = loginInfo ? true : false;
-      if(this.loggedIn){
-        this.userFirstName = loginInfo.firstName;
+    if(window.location.href.includes('jwt')){
+      var jwt = new URLSearchParams(window.location.search).get('jwt');
+      localStorage.setItem('jwt', jwt);
+      window.history.pushState({}, document.title, window.location.pathname);
+      window.location.reload();
+    }
+    await this.loginService.checkLogin().then((data : UserDetails) => {
+      if(data){
+        this.userFirstName = data.firstName;
+        this.loggedIn = true;
+      } else {
+        this.userFirstName = '';
+      this.loggedIn = false;
       }
-      if(window.location.href.includes('jwt')){
-        var jwt = new URLSearchParams(window.location.search).get('jwt');
-        localStorage.setItem('jwt', jwt);
-        window.history.pushState({}, document.title, window.location.pathname);
-        window.location.reload();
-      }
-    }).catch((e) => {
-      console.log(e);
+      return data;
+    }).catch((err) => {
+      console.log('An error has occured.');
+      this.userFirstName = '';
+      this.loggedIn = false;
     });
   }
 

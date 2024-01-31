@@ -15,7 +15,7 @@ export class LoginService {
     const jwt = localStorage.getItem('jwt');
     console.log(jwt);
     if(!jwt){
-      return null;
+      return new Promise((resolve, reject) => {reject()});
     }
     const headers = new HttpHeaders().set('Content-Type','application.json')
                                       .set('Authorization', 'Bearer ' + jwt);

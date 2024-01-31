@@ -30,27 +30,25 @@ export class AccountComponent implements OnInit {
   constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar, private loginService : LoginService) { }
 
   async ngOnInit(): Promise<void> {
-    var loginInfo;
-    await this.loginService.checkLogin().then((res : UserDetails) => {
-      loginInfo = res;
-      this.loggedIn = loginInfo ? true : false;
-      if(this.loggedIn){
-        this.userFirstName = loginInfo.firstName;
+    await this.loginService.checkLogin().then((data : UserDetails) => {
+      if(data){
+        this.userFirstName = data.firstName;
+        this.loggedIn = true;
         this.getUrlDetails();
+      } else {
+        this.userFirstName = '';
+      this.loggedIn = false;
       }
-    }).catch((e) => {
-      var errorMsg='Unexpected error occured'
-      this.snackBar.open(errorMsg, 'close', {duration: 3000});
+      return data;
+    }).catch((err) => {
+      console.log('An error has occured.');
+      this.userFirstName = '';
+      this.loggedIn = false;
     });
   }
 
   public logOut() : void {
     this.loginService.logOut();
-    var loginInfo = this.loginService.checkLogin();
-    this.loggedIn = loginInfo ? true : false;
-    if(!this.loggedIn){
-      this.userFirstName = '';
-    }
   }
 
   public async getUrlDetailsSimple(){
