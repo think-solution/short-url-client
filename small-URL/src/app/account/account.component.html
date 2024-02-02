@@ -94,7 +94,7 @@
 </div>
 
 <div *ngIf="loggedIn" [ngStyle]="{'padding-top':'10em', 'padding-left':'10em'}">
-  <div *ngIf="userURLData && userURLData.length != 0 && displayGrid" [ngStyle]="{'padding-top':'2em'}">
+  <div *ngIf="userURLData && userURLData.length != 0 && displayGrid; else elseBlockLoginNoData" [ngStyle]="{'padding-top':'2em'}">
     <cdk-accordion class="example-accordion-detailed">
       <cdk-accordion-item
       #accordionItem="cdkAccordionItem"
@@ -174,6 +174,7 @@
       </cdk-accordion-item>
     </cdk-accordion>
   </div>
+  <ng-template  #elseBlockLoginNoData><h4 [ngStyle]="{'margin-left':'30%', 'font-weight':'bold'}">No details to display (YET) ! Get started now with Kutie URL!</h4></ng-template>
 </div>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
