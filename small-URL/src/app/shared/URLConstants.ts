@@ -9,5 +9,7 @@ export const URL_CONSTANTS = {
     'checkRecaptcha' : 'auth/check-recaptcha',
     'download' : 'analytics/download/',
     'analyticsInfo' : 'analytics/analyticsInfo/',
-    'analytics' : 'analytics/'
+    'analytics' : 'analytics/',
+    'kutieURLBase' : 'http://localhost:4200',
+    'routes' : 'login,account'
 }

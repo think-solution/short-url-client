@@ -88,26 +88,9 @@ export class URLDataService {
       .subscribe({
         next:((res) => {
           if(res) {
-            console.log('URL details successfully fetched for download.');
-            // var blob = new Blob([res], { type: 'text/xml' });
-            // var url= window.URL.createObjectURL(blob);
-            // window.open(url);
-            var blob = new Blob([res],{
-              type:'application/ms-excel'
-            })
-
-            let url = window.URL.createObjectURL(blob);
-            let pwa = window.open(url);
-            if (!pwa || pwa.closed || typeof pwa.closed == 'undefined') {
-                alert( 'Please disable your Pop-up blocker and try again.');
-            }
-            // var url = URL.createObjectURL(blob);
-            // var element = document.createElement('a');
-            // element.href = url;
-            // element.setAttribute('download','file.csv');
-            // document.body.appendChild(element);
-            // element.click();
-            // resolve();
+            let blob = new Blob([res], {type: 'application/zip'});
+            let fileUrl = window.URL.createObjectURL(blob);
+            window.open(fileUrl);
           }
           
         }),

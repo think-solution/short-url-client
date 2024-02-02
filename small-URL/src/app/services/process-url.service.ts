@@ -37,4 +37,9 @@ export class ProcessURLService {
       })
     })
   }
+
+  public redirect(shortCode : string) : void {
+    var redirectUrl = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode;
+    window.location.href = redirectUrl;
+  }
 }
