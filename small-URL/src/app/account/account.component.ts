@@ -3,6 +3,7 @@ import { URLDataService } from '../services/urldata.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../services/login.service';
 import { UserDetails } from '../shared/user-details';
+import { URL_CONSTANTS } from '../shared/URLConstants';
 
 @Component({
   selector: 'app-account',
@@ -18,7 +19,7 @@ export class AccountComponent implements OnInit {
 
 
   //Non-login mode
-  smallUrl : string = '';
+  url : string = '';
   urlData : {};
   urlDataColumns: string[] = ['position', 'date', 'count'];
 
@@ -52,32 +53,42 @@ export class AccountComponent implements OnInit {
   }
 
   public async getUrlDetailsSimple(){
-    var expression = '/^[a-zA-Z0-9]+$/';
+    var expression = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
     var regex = new RegExp(expression);
     var errorMsg = '';
-    if(this.smallUrl === '') {
+    if(this.url === '') {
       this.displayGrid = false;
       errorMsg='Please enter Kutie URL Short Code to continue';
       this.snackBar.open(errorMsg, 'close', {duration: 3000});
-    } else if(false){
+    } else if(!regex.test(this.url)){
       this.displayGrid = false;
-      errorMsg='The Kutie URL Short Code can only contain numbers and letters'
+      errorMsg='The Kutie URL you have entered is in the wrong format. Please check again.'
       this.snackBar.open(errorMsg, 'close', {duration: 3000});
     } else {
-      this.urlData = await this.urlDataService.getUrlDetailsSimple(this.smallUrl)
-      .then((data) => { 
-        this.displayGrid = true;
-        return data;
-      }).catch((err) => {
-        this.displayGrid = false;
-        console.log(err);
-        errorMsg='Error occured while fetching URL data';
-        this.snackBar.open(errorMsg, 'close', {duration: 3000});
-        return {};
-      });
-      if(!this.urlData){
-        errorMsg='Could not find any data for the URL provided'
-        this.snackBar.open(errorMsg, 'close', {duration: 3000});
+      if(this.url === URL_CONSTANTS.kutieURLBase || this.url === URL_CONSTANTS.kutieURLBase + '/'){
+        errorMsg="Please enter the complete Kutie URL with the short code in the end. Ex: '/abc12'"
+        this.snackBar.open(errorMsg, 'close', {duration: 5000});
+      } else if(this.url.startsWith(URL_CONSTANTS.kutieURLBase)){
+        let urlArray = this.url.split('/');
+        let shortCode = urlArray[urlArray.length - 1];
+        this.urlData = await this.urlDataService.getUrlDetailsSimple(shortCode)
+        .then((data) => { 
+          this.displayGrid = true;
+          return data;
+        }).catch((err) => {
+          this.displayGrid = false;
+          console.log(err);
+          errorMsg='Error occured while fetching URL data. Please try again.';
+          this.snackBar.open(errorMsg, 'close', {duration: 3000});
+          return {};
+        });
+        if(!this.urlData){
+          errorMsg='Could not find any data for the URL provided'
+          this.snackBar.open(errorMsg, 'close', {duration: 3000});
+        }
+      } else {
+        errorMsg='Incorrect URL provided. Please try again.'
+          this.snackBar.open(errorMsg, 'close', {duration: 3000});
       }
     }
   }
@@ -91,10 +102,8 @@ export class AccountComponent implements OnInit {
     this.userAnalyticsData = await this.urlDataService.getUserIdDetails(id);
   }
 
-  public async downloadData(id : number){
-    await this.urlDataService.downloadData(id).catch((e) => {
-      console.log(e)
-    });
+  public downloadData(id : number){
+    this.urlDataService.downloadData(id);
   }
 
   public removeOverflow(){

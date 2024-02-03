@@ -29,7 +29,7 @@
 <div *ngIf="!loggedIn" [ngStyle]="{'padding-top':'3em'}" class="text-center">
   <form (submit)="$event.preventDefault()" [ngStyle]="{'padding-left':'5em'}">
     <input matInput cdkTextareaAutosize 
-           name="url" [(ngModel)]="smallUrl" 
+           name="url" [(ngModel)]="url" 
            placeholder="Enter your Kutie URL Short Code and hit Get Details!" 
            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"/>
     <button (click)="getUrlDetailsSimple()" mat-fab extended>
