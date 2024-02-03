@@ -12,6 +12,9 @@ export class AppComponent {
   title = 'small-URL';
 
   constructor(private processURLService : ProcessURLService, private router : Router) {
+    console.log('app.component.ts');
+    console.log(localStorage.getItem('shortCode'));
+    console.log(window.location.href);
     let path = window.location.href;
     let code = localStorage.getItem('shortCode');
     if(code){
