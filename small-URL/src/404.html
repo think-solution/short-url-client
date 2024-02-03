@@ -2,8 +2,10 @@
 <script>
     console.log('outside');
     console.log(window.location.href);
-    const path = window.location.pathname.slice(1);
+    const path = window.location.pathname;
+    const arrPath = path.split('/');
     console.log(path);
-    localStorage.setItem('shortCode', path);
+    if(arrPath.length>0)
+    localStorage.setItem('shortCode', arrPath[arrPath.length-1]);
     window.location.href='./';
 </script>
