@@ -9,6 +9,7 @@
     </button>
   </form>
   <div id='generatedURL' *ngIf = "smallURL !== ''">
+    <span [ngStyle]="{'font-style':'italic'}" *ngIf="displayURL">Here is your Original URL: &nbsp;&nbsp;</span><span [ngStyle]="{'font-weight':'bold'}">{{displayURL}}</span><br>
     <span [ngStyle]="{'font-style':'italic'}">Here is your Kutie URL: &nbsp;&nbsp;</span><span [ngStyle]="{'font-weight':'bold'}">{{smallURL}}</span>
     <button color="green" [cdkCopyToClipboard]="smallURL" mat-fab extended (click)="this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000})">
       <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='Copy to clipboard'>content_copy</mat-icon>

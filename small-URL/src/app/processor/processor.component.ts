@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ProcessURLService } from '../services/process-url.service';
 import { GeneratedSmallUrl } from './generated-url';
+import { timeInterval } from 'rxjs';
 
 @Component({
   selector: 'app-processor',
@@ -14,6 +15,7 @@ export class ProcessorComponent implements OnInit {
   url = '';
   errorMsg = '';
   smallURL = '';
+  displayURL = '';
 
   constructor(public snackBar: MatSnackBar, private processURLService : ProcessURLService, private clipboard : Clipboard) { }
 
@@ -32,6 +34,7 @@ export class ProcessorComponent implements OnInit {
     } else {
       this.processURLService.generateSmallURL(this.url).then((retVal : GeneratedSmallUrl) => {
         this.smallURL = retVal.callUrl;
+        this.displayURL = this.url;
         this.url = '';
         this.clipboard.copy(retVal.callUrl);
         this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000});

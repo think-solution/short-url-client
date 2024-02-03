@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { URL_CONSTANTS } from './shared/URLConstants';
 import { ProcessURLService } from './services/process-url.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -10,29 +11,12 @@ import { ProcessURLService } from './services/process-url.service';
 export class AppComponent {
   title = 'small-URL';
 
-  constructor(private processURLService : ProcessURLService) {
+  constructor(private processURLService : ProcessURLService, private router : Router) {
+    let path = window.location.href;
     let code = localStorage.getItem('shortCode');
     if(code){
       localStorage.removeItem('shortCode');    
       processURLService.redirect(code);
-    }
-    let path = window.location.href;
-    let routeArr = URL_CONSTANTS.routes.split(',');
-    if(!(path === URL_CONSTANTS.kutieURLBase || path === URL_CONSTANTS.kutieURLBase + '/')){ //If absolute path, continue
-      if(path.startsWith(URL_CONSTANTS.kutieURLBase)){
-        let urlArray = path.split('/');
-        let shortCode = urlArray[urlArray.length - 1];
-        if(routeArr.includes(shortCode)){
-          //Internal rountes, do nothing.
-        }
-        else if(path === URL_CONSTANTS.kutieURLBase + '/' + shortCode){
-          localStorage.setItem('shortCode', shortCode);
-          window.location.href='../';
-        }else {
-          alert('Could not recognize the provided URL, please check again.');
-          throw new Error('Could not recognize the provided URL, please check again.');
-        }
-      }
     }
   }
 }
