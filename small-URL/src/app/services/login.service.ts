@@ -42,6 +42,6 @@ export class LoginService {
     if(window.location.href.includes('jwt')){
       window.history.pushState({}, document.title, window.location.pathname);
     }
-    window.location.href='../';
+    window.location.reload();
   }
 }

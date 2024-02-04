@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoginService } from '../services/login.service';
 import { UserDetails } from '../shared/user-details';
 import { URL_CONSTANTS } from '../shared/URLConstants';
+import { ProcessURLService } from '../services/process-url.service';
 
 @Component({
   selector: 'app-account',
@@ -28,7 +29,7 @@ export class AccountComponent implements OnInit {
   userURLDataColumns: string[] = ['position', 'date', 'deviceType', 'client', 'ip', 'location', 'coordinates'];
   userAnalyticsData = {};
 
-  constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar, private loginService : LoginService) { }
+  constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar, private loginService : LoginService, private processURLService : ProcessURLService) { }
 
   async ngOnInit(): Promise<void> {
     await this.loginService.checkLogin().then((data : UserDetails) => {
@@ -53,16 +54,14 @@ export class AccountComponent implements OnInit {
   }
 
   public async getUrlDetailsSimple(){
-    var expression = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
-    var regex = new RegExp(expression);
     var errorMsg = '';
     if(this.url === '') {
       this.displayGrid = false;
       errorMsg='Please enter Kutie URL Short Code to continue';
       this.snackBar.open(errorMsg, 'close', {duration: 3000});
-    } else if(!regex.test(this.url)){
+    } else if(!this.processURLService.checkHttpUrl(this.url)){
       this.displayGrid = false;
-      errorMsg='The Kutie URL you have entered is in the wrong format. Please check again.'
+      errorMsg="Check the format of the entered URL. Be sure to include the protocol: 'http or https'";
       this.snackBar.open(errorMsg, 'close', {duration: 3000});
     } else {
       if(this.url === URL_CONSTANTS.kutieURLBase || this.url === URL_CONSTANTS.kutieURLBase + '/'){

@@ -42,4 +42,15 @@ export class ProcessURLService {
     var redirectUrl = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode;
     window.location.href = redirectUrl;
   }
+
+  public checkHttpUrl(url : string) {
+    let givenURL;
+    try {
+        givenURL = new URL(url);
+    } catch (error) {
+        console.log("There was a problem with the URL entered.");
+        return false;  
+    }
+    return givenURL.protocol === "http:" || givenURL.protocol === "https:";
+  }
 }

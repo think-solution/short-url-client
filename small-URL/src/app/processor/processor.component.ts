@@ -23,13 +23,11 @@ export class ProcessorComponent implements OnInit {
   }
 
   shortenUrl(){
-    var expression = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
-    var regex = new RegExp(expression);
     if(this.url === '') {
       this.errorMsg='Please enter a URL to continue.'
       this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
-    } else if(!this.url.match(regex)){
-      this.errorMsg='Please enter the URL in the correct format'
+    } else if(!this.processURLService.checkHttpUrl(this.url)){
+      this.errorMsg="Check the format of the entered URL. Be sure to include the protocol: 'http or https'";
       this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
     } else {
       this.processURLService.generateSmallURL(this.url).then((retVal : GeneratedSmallUrl) => {
