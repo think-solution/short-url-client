@@ -1,28 +1,4 @@
-<div class="pull-right" [ngStyle]="{'margin-right':'1em'}">
-    <button mat-fab extended [matMenuTriggerFor]="menu" (click)="removeOverflow()">
-        <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='User Account'>account_circle</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <span mat-menu-item *ngIf="userFirstName && userFirstName.length > 0">
-          <p [ngStyle]="{'font-style':'italic'}">Hi {{userFirstName}}!</p>
-        </span>
-        <button mat-menu-item routerLink="login" *ngIf="!loggedIn">
-          <mat-icon>account_box</mat-icon>
-          <span>Sign-in with Google</span>
-        </button>
-        <button mat-menu-item routerLink="account">
-          <mat-icon>assessment</mat-icon>
-          <span>View Details</span>
-        </button>
-        <button mat-menu-item *ngIf="loggedIn" (click)="logOut()">
-          <mat-icon>input</mat-icon>
-          <span>Logout</span>
-        </button>
-      </mat-menu>
-</div>
-
 <div class="text-center">
-    <h1>Kutie URL</h1>
     <br>
     <br>
     <p>Welcome to Kutie URL. Get your URL shortened for absolutely FREE!</p>
@@ -34,8 +10,6 @@
     <br>
     <app-processor></app-processor>
 </div>
-<!-- <app-login></app-login>
-<app-account></app-account> -->
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 

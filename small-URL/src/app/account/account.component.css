@@ -1,9 +1,3 @@
-h2 a{
-    color: darkolivegreen;
-    font-weight: bold;
-    text-decoration: none;
-}
-
 input{
     text-align: center;
     display: inline;
@@ -67,3 +61,7 @@ table{
 h3{
     color:darkblue;
 }
+
+.mat-header-cell, .mat-cell {
+    text-align: center !important;
+  }

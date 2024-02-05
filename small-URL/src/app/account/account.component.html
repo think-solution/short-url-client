@@ -1,31 +1,3 @@
-<div class="text-center">
-    <h2><a routerLink="">Kutie URL</a></h2>
-</div>
-
-<div class="pull-right" [ngStyle]="{'margin-right':'1em'}">
-    <button mat-fab extended [matMenuTriggerFor]="menu" (click)="removeOverflow()">
-        <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='User Account'>account_circle</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-        <span mat-menu-item  *ngIf="userFirstName && userFirstName.length > 0">
-          <p [ngStyle]="{'font-style':'italic'}">Hi {{userFirstName}}!</p>
-        </span>
-        <button mat-menu-item routerLink="">
-          <mat-icon>home</mat-icon>
-          <span>Home</span>
-        </button>
-        <button mat-menu-item routerLink="/login" *ngIf="!loggedIn">
-          <mat-icon>account_box</mat-icon>
-          <span>Sign-in with Google</span>
-        </button>
-        <button mat-menu-item *ngIf="loggedIn" (click)="logOut()">
-          <mat-icon>input</mat-icon>
-          <span>Logout</span>
-        </button>
-      </mat-menu>
-</div>
-
-
 <div *ngIf="!loggedIn" [ngStyle]="{'padding-top':'3em'}" class="text-center">
   <form (submit)="$event.preventDefault()" [ngStyle]="{'padding-left':'5em'}">
     <input matInput cdkTextareaAutosize 
@@ -63,7 +35,7 @@
         [attr.id]="accordion-body-0"
         [attr.aria-labelledby]="accordion-header-0">
           <div *ngIf="this.urlData.clicksPerday && this.urlData.clicksPerday.length > 0; else elseBlockLogout">
-            <table mat-table [dataSource]="this.urlData.clicksPerday">
+            <table mat-table [dataSource]="this.urlData.clicksPerday" [ngStyle]="{'text-align': 'center !important'}">
               <!--Position Column-->
               <ng-container matColumnDef="position">
                 <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -73,7 +45,7 @@
              <!--Date Column-->
              <ng-container matColumnDef="date">
               <th mat-header-cell *matHeaderCellDef>Date</th>
-              <td mat-cell *matCellDef="let element">{{element.date | date : 'MMMM d, y, h:mm:ss a'}}</td>
+              <td mat-cell *matCellDef="let element">{{element.date + 1 | date : "MMMM d, y":"UTC"}}</td>
             </ng-container>
   
             <!--Count Column-->
@@ -105,11 +77,11 @@
       [attr.aria-expanded]="accordionItem.expanded"
       [attr.aria-controls]="accordion-body-0" *ngFor="let item of userURLData; let index = index">
       <div class="example-accordion-item-header" (click)="accordionItem.toggle(); getAnalyticsData(item.id)">
-        <h5>{{item.shortCode}}
+        <h4>{{item.shortCode}}
           <span class="example-accordion-item-description pull-right">
           Click to {{ accordionItem.expanded ? 'close' : 'open' }}
           </span>
-        </h5><br/>
+        </h4><br/>
         <span [ngStyle]="{'font-weight':'bold'}">Short Code: </span> {{item.shortCode}} <br/>
         <span [ngStyle]="{'font-weight':'bold'}">URL: </span> {{item.url}} <br/>
         <span [ngStyle]="{'font-weight':'bold'}">Total Clicks: </span> {{item.clickCount}} <br/>

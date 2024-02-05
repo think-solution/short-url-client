@@ -5,7 +5,8 @@ import { LoginService } from '../services/login.service';
 import { UserDetails } from '../shared/user-details';
 import { URL_CONSTANTS } from '../shared/URLConstants';
 import { ProcessURLService } from '../services/process-url.service';
-
+import { UserDetailsSimple } from '../shared/url-details-simple';
+import { ClicksPerDay } from '../shared/clicks-per-day';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -16,7 +17,6 @@ export class AccountComponent implements OnInit {
   //Common
   loggedIn : boolean = false;
   displayGrid : boolean = false;
-  userFirstName : string = '';
 
 
   //Non-login mode
@@ -34,23 +34,16 @@ export class AccountComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.loginService.checkLogin().then((data : UserDetails) => {
       if(data){
-        this.userFirstName = data.firstName;
         this.loggedIn = true;
         this.getUrlDetails();
       } else {
-        this.userFirstName = '';
       this.loggedIn = false;
       }
       return data;
     }).catch((err) => {
       console.log('An error has occured.');
-      this.userFirstName = '';
       this.loggedIn = false;
     });
-  }
-
-  public logOut() : void {
-    this.loginService.logOut();
   }
 
   public async getUrlDetailsSimple(){
@@ -71,9 +64,14 @@ export class AccountComponent implements OnInit {
         let urlArray = this.url.split('/');
         let shortCode = urlArray[urlArray.length - 1];
         this.urlData = await this.urlDataService.getUrlDetailsSimple(shortCode)
-        .then((data) => { 
-          this.displayGrid = true;
-          return data;
+        .then((data : UserDetailsSimple) => { 
+          if(data){
+            this.displayGrid = true;
+            data.clicksPerday.forEach((c : ClicksPerDay) => {
+              c.date = new Date(c.date).toUTCString();
+            });
+            return data;
+          }
         }).catch((err) => {
           this.displayGrid = false;
           console.log(err);
@@ -103,14 +101,5 @@ export class AccountComponent implements OnInit {
 
   public downloadData(id : number){
     this.urlDataService.downloadData(id);
-  }
-
-  public removeOverflow(){
-    var elements = Array.from(document.getElementsByClassName('mat-menu-panel') as HTMLCollectionOf<HTMLElement>);
-    if(elements){
-      elements.forEach((element) => {
-        element.setAttribute('style','overflow:hidden !important')
-      })
-    }
   }
 }

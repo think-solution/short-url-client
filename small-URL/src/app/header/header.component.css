@@ -1,0 +1,9 @@
+h1 a{
+    color: darkolivegreen;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.col-xs-6 {
+    width: 20% !important;
+}

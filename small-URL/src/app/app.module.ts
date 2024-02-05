@@ -11,6 +11,7 @@ import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { HttpClientModule } from '@angular/common/http';
 import { ProcessorComponent } from './processor/processor.component';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -18,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { FormsModule } from '@angular/forms';
     HomeComponent,
     LoginComponent,
     AccountComponent,
-    ProcessorComponent
+    ProcessorComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +38,7 @@ import { FormsModule } from '@angular/forms';
     ClipboardModule,
     HttpClientModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,

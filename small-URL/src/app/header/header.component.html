@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-xs-6 text-center" [ngStyle]="{'margin-left':'40%'}">
+        <h1><a routerLink="">Kutie URL</a></h1>
+    </div>
+    <div class="col-xs-6 pull-right" [ngStyle]="{'margin-top':'1em'}">
+          <mat-button-toggle-group #group="matButtonToggleGroup">
+            <mat-button-toggle disabled="disabled" *ngIf="userFirstName && userFirstName.length > 0">
+                <p [ngStyle]="{'font-style':'italic', 'color':'black'}">Hi {{userFirstName}}!</p>
+            </mat-button-toggle>
+            <mat-button-toggle *ngIf="!loggedIn" routerLink="login">
+                <mat-icon>account_box</mat-icon>
+                <span>Sign-in with Google</span>
+            </mat-button-toggle>
+            <mat-button-toggle routerLink="" *ngIf="this.router.url !== '/'">
+                <mat-icon>home</mat-icon>
+                <span>Home</span>
+            </mat-button-toggle>
+            <mat-button-toggle routerLink="account" *ngIf="this.router.url !== '/account'">
+                <mat-icon>assessment</mat-icon>
+                <span>View Details</span>
+            </mat-button-toggle>
+            <mat-button-toggle *ngIf="loggedIn" (click)="logOut()">
+                <mat-icon>input</mat-icon>
+                <span> Logout</span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+    </div>

@@ -75,32 +75,12 @@ export class URLDataService {
     })
   }
 
-  public downloadData(id : number) : Promise<void> {
-    const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.download + id;
+  public downloadData(id : number) : void {
+    var url = URL_CONSTANTS.baseURL + URL_CONSTANTS.download + id;
     const jwt = localStorage.getItem('jwt');
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + jwt);
-    //headers.set({responseType: 'text'})
-    return new Promise((resolve,reject) => {
-      if(!jwt){
-        reject();
-      }
-      this.http.get(url, {headers:headers, responseType : 'text'})
-      .subscribe({
-        next:((res) => {
-          if(res) {
-            let blob = new Blob([res], {type: 'application/zip'});
-            let fileUrl = window.URL.createObjectURL(blob);
-            window.open(fileUrl);
-          }
-          
-        }),
-        error: ((err) => {
-          console.log('Error getting user URLs URL details for download.');
-          console.log(err);
-          reject();
-        })
-      })
-    })
+    if(jwt){
+      url = url + '?jwt=' + jwt;
+      window.open(url, '_blank');
+    }
   }
-
 }
