@@ -2,7 +2,7 @@
   <form (submit)="$event.preventDefault()" [ngStyle]="{'padding-left':'5em'}">
     <input matInput cdkTextareaAutosize 
            name="url" [(ngModel)]="url" 
-           placeholder="Enter your Kutie URL Short Code and hit Get Details!" 
+           placeholder="Enter your Kutie URL and get the details!" 
            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="10"/>
     <button (click)="getUrlDetailsSimple()" mat-fab extended>
       <mat-icon matTooltipClass="example-tooltip-uppercase" matTooltip='Get!'>arrow_right_alt</mat-icon>
@@ -65,7 +65,7 @@
   </div>
 </div>
 
-<div *ngIf="loggedIn" [ngStyle]="{'padding-top':'10em', 'padding-left':'10em'}">
+<div *ngIf="loggedIn" [ngStyle]="{'padding-left':'10em'}">
   <div *ngIf="userURLData && userURLData.length != 0 && displayGrid; else elseBlockLoginNoData" [ngStyle]="{'padding-top':'2em'}">
     <cdk-accordion class="example-accordion-detailed">
       <cdk-accordion-item

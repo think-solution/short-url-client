@@ -31,16 +31,10 @@ export class ProcessURLService {
         }),
         error: ((err) => {
           console.log('Error generating KutieURL.');
-          console.log(err);
           reject();
         })
       })
     })
-  }
-
-  public redirect(shortCode : string) : void {
-    var redirectUrl = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode;
-    window.location.href = redirectUrl;
   }
 
   public checkHttpUrl(url : string) {

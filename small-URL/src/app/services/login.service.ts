@@ -13,7 +13,6 @@ export class LoginService {
   public checkLogin() : Promise<UserDetails> {
     const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.checkLogin;
     const jwt = localStorage.getItem('jwt');
-    console.log(jwt);
     if(!jwt){
       return new Promise((resolve, reject) => {reject()});
     }
@@ -30,7 +29,6 @@ export class LoginService {
         }),
         error: ((err) => {
           console.log('User login verification failed');
-          console.log(err);
           reject();
         })
       })

@@ -74,7 +74,6 @@ export class AccountComponent implements OnInit {
           }
         }).catch((err) => {
           this.displayGrid = false;
-          console.log(err);
           errorMsg='Error occured while fetching URL data. Please try again.';
           this.snackBar.open(errorMsg, 'close', {duration: 3000});
           return {};

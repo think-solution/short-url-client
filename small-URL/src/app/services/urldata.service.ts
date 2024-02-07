@@ -22,7 +22,6 @@ export class URLDataService {
         }),
         error: ((err) => {
           console.log('Error getting simple URL details');
-          console.log(err);
           reject();
         })
       })
@@ -45,7 +44,6 @@ export class URLDataService {
         }),
         error: ((err) => {
           console.log('Error getting user URLs');
-          console.log(err);
           reject();
         })
       })
@@ -68,7 +66,6 @@ export class URLDataService {
         }),
         error: ((err) => {
           console.log('Error getting user URLs.');
-          console.log(err);
           reject();
         })
       })

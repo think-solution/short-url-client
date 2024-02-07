@@ -1,10 +1,7 @@
 <p>this is a 404 page</p>
 <script>
-    console.log('outside');
-    console.log(window.location.href);
     const path = window.location.pathname;
     const arrPath = path.split('/');
-    console.log(path);
     if(arrPath.length>0)
     localStorage.setItem('shortCode', arrPath[arrPath.length-1]);
     window.location.href='./';

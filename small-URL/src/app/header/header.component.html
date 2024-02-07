@@ -1,27 +1,35 @@
 <div class="row">
-    <div class="col-xs-6 text-center" [ngStyle]="{'margin-left':'40%'}">
+    <div class="col-xs-6 text-center" [ngStyle]="{'margin-left':'45%'}">
         <h1><a routerLink="">Kutie URL</a></h1>
     </div>
-    <div class="col-xs-6 pull-right" [ngStyle]="{'margin-top':'1em'}">
-          <mat-button-toggle-group #group="matButtonToggleGroup">
-            <mat-button-toggle disabled="disabled" *ngIf="userFirstName && userFirstName.length > 0">
-                <p [ngStyle]="{'font-style':'italic', 'color':'black'}">Hi {{userFirstName}}!</p>
-            </mat-button-toggle>
-            <mat-button-toggle *ngIf="!loggedIn" routerLink="login">
-                <mat-icon>account_box</mat-icon>
-                <span>Sign-in with Google</span>
-            </mat-button-toggle>
-            <mat-button-toggle routerLink="" *ngIf="this.router.url !== '/'">
-                <mat-icon>home</mat-icon>
-                <span>Home</span>
-            </mat-button-toggle>
-            <mat-button-toggle routerLink="account" *ngIf="this.router.url !== '/account'">
-                <mat-icon>assessment</mat-icon>
-                <span>View Details</span>
-            </mat-button-toggle>
-            <mat-button-toggle *ngIf="loggedIn" (click)="logOut()">
-                <mat-icon>input</mat-icon>
-                <span> Logout</span>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
+    <div class="col-xs-6 pull-right">
+          <mat-list>
+            <mat-list-item *ngIf="userFirstName && userFirstName.length > 0">
+                <p [ngStyle]="{'font-style':'italic', 'font-weight' : 'bold', 'color':'black'}">Hi {{userFirstName}}!</p>
+            </mat-list-item>
+            <mat-list-item *ngIf="!loggedIn">
+                <button mat-raised-button color="accent" routerLink="login">
+                    <mat-icon>account_box</mat-icon>
+                    <span>Sign-in with Google</span>
+                </button>
+            </mat-list-item>
+            <mat-list-item  *ngIf="this.router.url !== '/'">
+                <button mat-raised-button color="accent" routerLink="">
+                    <mat-icon>home</mat-icon>
+                    <span>Home</span>
+                </button>
+            </mat-list-item>
+            <mat-list-item *ngIf="this.router.url !== '/account'">
+                <button mat-raised-button color="accent" routerLink="account">
+                    <mat-icon>assessment</mat-icon>
+                    <span>View Details</span>
+                </button>
+            </mat-list-item>
+            <mat-list-item *ngIf="loggedIn">
+                <button mat-raised-button color="accent" (click)="logOut()">
+                    <mat-icon>input</mat-icon>
+                    <span> Logout</span>
+                </button>
+            </mat-list-item>
+          </mat-list>
     </div>
