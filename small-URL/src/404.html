@@ -4,6 +4,7 @@
     if(!(path === kutieURLBase || path === kutieURLBase + '/') && path.startsWith(kutieURLBase)){
         let shortCode = path.substring(50); //Might need updating once domain is confirmed for production.
         localStorage.setItem('shortCode', shortCode);
+        localStorage.setItem('displayContent', 'false');
     }
     window.location.href = kutieURLBase;
 </script>

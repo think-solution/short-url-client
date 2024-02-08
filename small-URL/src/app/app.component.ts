@@ -20,6 +20,7 @@ constructor(private router : Router, private urlDataService : URLDataService, pr
     urlDataService.getUrlDetailsSimple(shortCode).then((data) => {
       if(data){
         localStorage.removeItem('shortCode');
+        localStorage.setItem('displayContent', 'true');
         processUrlService.redirect(shortCode);
       } else {
         console.error('Could not find the path specified.');
