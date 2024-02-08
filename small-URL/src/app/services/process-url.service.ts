@@ -37,8 +37,8 @@ export class ProcessURLService {
     })
   }
 
-  public redirect(url : string) {
-    window.location.href = url;
+  public redirect(shortCode : string) {
+    window.location.href = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode;
   }
 
   public checkHttpUrl(url : string) {
