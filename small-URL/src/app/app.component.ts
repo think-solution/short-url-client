@@ -14,8 +14,8 @@ export class AppComponent {
   displayContent : boolean = false;
 
 constructor(private router : Router, private urlDataService : URLDataService, private processUrlService : ProcessURLService) {
-  let shortCode = localStorage.getItem('shortCode');
   this.displayContent = localStorage.getItem('displayContent') === 'true';
+  let shortCode = localStorage.getItem('shortCode');
   if(shortCode){
     urlDataService.getUrlDetailsSimple(shortCode).then((data) => {
       if(data){
@@ -27,10 +27,12 @@ constructor(private router : Router, private urlDataService : URLDataService, pr
     }).catch((e) => {
       console.error('Could not find the path specified.');
       });
+      localStorage.removeItem('shortCode');
+      localStorage.setItem('displayContent', 'true');
+      window.location.href = URL_CONSTANTS.kutieURLBase;
+    } else {
+      this.displayContent = true;
     }
-    localStorage.removeItem('shortCode');
-    localStorage.setItem('displayContent', 'true');
-    window.location.href = URL_CONSTANTS.kutieURLBase;
   }
   
 }
