@@ -11,10 +11,12 @@ import { URLDataService } from './services/urldata.service';
 })
 export class AppComponent {
   title = 'small-URL';
+  displayContent : boolean = true;
 
 constructor(private router : Router, private urlDataService : URLDataService, private processUrlService : ProcessURLService) {
   let shortCode = localStorage.getItem('shortCode');
   if(shortCode){
+    this.displayContent = false;
     urlDataService.getUrlDetailsSimple(shortCode).then((data) => {
       if(data){
         localStorage.removeItem('shortCode');
