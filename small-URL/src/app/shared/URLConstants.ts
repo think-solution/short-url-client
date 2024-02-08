@@ -11,6 +11,5 @@ export const URL_CONSTANTS = {
     'analyticsInfo' : 'analytics/analyticsInfo/',
     'analytics' : 'analytics/',
     'kutieURLBase' : 'https://think-solution.github.io/short-url-client',
-    'kutieURLBase' : 'http://localhost:4200',
     'routes' : 'login,account'
 }
