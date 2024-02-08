@@ -16,23 +16,29 @@ export class AppComponent {
 constructor(private router : Router, private urlDataService : URLDataService, private processUrlService : ProcessURLService) {
   this.displayContent = localStorage.getItem('displayContent') === 'true';
   let shortCode = localStorage.getItem('shortCode');
+  console.log(1);
   if(shortCode){
     urlDataService.getUrlDetailsSimple(shortCode).then((data) => {
       if(data){
         localStorage.removeItem('shortCode');
         localStorage.setItem('displayContent', 'true');
         processUrlService.redirect(shortCode);
+        console.log(2);
       } else {
         console.error('Could not find the path specified.');
+        console.log(3);
       }
     }).catch((e) => {
       console.error('Could not find the path specified.');
+      console.log(4);
       });
       localStorage.removeItem('shortCode');
       localStorage.setItem('displayContent', 'true');
       window.location.href = URL_CONSTANTS.kutieURLBase;
+      console.log(5);
     } else {
       this.displayContent = true;
+      console.log(6);
     }
   }
   
