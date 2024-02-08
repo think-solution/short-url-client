@@ -17,6 +17,7 @@ constructor(private router : Router, private urlDataService : URLDataService, pr
   if(shortCode){
     urlDataService.getUrlDetailsSimple(shortCode).then((data) => {
       if(data){
+        localStorage.removeItem('shortCode');
         processUrlService.redirect(URL_CONSTANTS.kutieURLBase + '/' + shortCode);
       } else {
         console.error('Could not find the path specified.');
