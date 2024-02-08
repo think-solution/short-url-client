@@ -1,12 +1,12 @@
 <div class="text-center" style="margin-top: 10em; margin-left: 10em;">
-    <h1>404: Page cannot be found</h1>
+    <h1 id="NotFoundHeader">404: Page cannot be found</h1>
 </div>
 <script>
-    //window.location.href='https://think-solution.github.io/short-url-client'; // Will need updating once domain is confirmed.
-    const path = window.location.pathname;
-    const arrPath = path.split('/');
-    if(arrPath.length>0){
-        localStorage.setItem('shortCode', arrPath[arrPath.length-1]);
+    let path = window.location.href;
+    let kutieURLBase = 'https://think-solution.github.io/short-url-client'; // Will need updating once domain is confirmed.
+    if(!(path === kutieURLBase || path === kutieURLBase + '/') && path.startsWith(URL_CONSTANTS.kutieURLBase)){
+        let shortCode = path.substring(50); //Might need updating once domain is confirmed for production.
+        localStorage.setItem('shortCode', shortCode);
     }
-    window.location.href='./';
+    window.location.href = kutieURLBase;
 </script>

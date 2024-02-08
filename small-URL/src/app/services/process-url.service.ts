@@ -37,6 +37,10 @@ export class ProcessURLService {
     })
   }
 
+  public redirect(url : string) {
+    window.location.href = url;
+  }
+
   public checkHttpUrl(url : string) {
     let givenURL;
     try {
