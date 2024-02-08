@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
         this.loggedIn = true;
       } else {
         this.userFirstName = '';
-      this.loggedIn = false;
+        this.loggedIn = false;
       }
       return data;
     }).catch((err) => {
