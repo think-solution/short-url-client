@@ -1,8 +1,6 @@
-<p>this is a 404 page</p>
+<div class="text-center" style="margin-top: 10em;">
+    <h1>404: Page cannot be found</h1>
+</div>
 <script>
-    const path = window.location.pathname;
-    const arrPath = path.split('/');
-    if(arrPath.length>0)
-    localStorage.setItem('shortCode', arrPath[arrPath.length-1]);
-    window.location.href='./';
+    window.location.href = URL_CONSTANTS.kutieURLBase;
 </script>
