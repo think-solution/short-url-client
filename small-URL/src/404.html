@@ -2,5 +2,11 @@
     <h1>404: Page cannot be found</h1>
 </div>
 <script>
-    window.location.href='https://think-solution.github.io/short-url-client'; // Will need updating once domain is confirmed
+    //window.location.href='https://think-solution.github.io/short-url-client'; // Will need updating once domain is confirmed.
+    const path = window.location.pathname;
+    const arrPath = path.split('/');
+    if(arrPath.length>0){
+        localStorage.setItem('shortCode', arrPath[arrPath.length-1]);
+    }
+    window.location.href='./';
 </script>
