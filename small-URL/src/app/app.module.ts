@@ -44,7 +44,7 @@ import { HeaderComponent } from './header/header.component';
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule,
-    FormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,12 +2,13 @@ h1 a{
     color: darkolivegreen;
     font-weight: bold;
     text-decoration: none;
-}
-
-.col-xs-6 {
-    width: 12% !important;
+    font-size: 3.2rem;
 }
 
 button{
-    width: 20rem;
+    width: 15rem;
+}
+
+span{
+    font-size: 1.2rem;
 }

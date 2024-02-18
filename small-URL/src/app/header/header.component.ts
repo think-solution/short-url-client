@@ -12,10 +12,20 @@ export class HeaderComponent implements OnInit {
 
   userFirstName : string = '';
   loggedIn : boolean = false;
+  loginChecked : boolean = false;
 
-  constructor(private loginService : LoginService, public router : Router) { }
+  constructor(private loginService : LoginService, public router : Router) {
+    window['grecaptchaIdChange'] = () =>  this.grecaptchaIdChange();
+  }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+  }
+
+  public async grecaptchaIdChange() {
+    var grecaptchaId = (<HTMLInputElement>document.getElementById('grecaptchaId')).value;
+    if(grecaptchaId){
+      await this.loginService.setGrecaptchaId(grecaptchaId);
+    }
     await this.loginService.checkLogin().then((data : UserDetails) => {
       if(data){
         this.userFirstName = data.firstName;
@@ -24,21 +34,12 @@ export class HeaderComponent implements OnInit {
         this.userFirstName = '';
         this.loggedIn = false;
       }
-      return data;
     }).catch((err) => {
       console.log('An error has occured.');
       this.userFirstName = '';
       this.loggedIn = false;
     });
-  }
-
-  public removeOverflow(){
-    var elements = Array.from(document.getElementsByClassName('mat-menu-panel') as HTMLCollectionOf<HTMLElement>);
-    if(elements){
-      elements.forEach((element) => {
-        element.setAttribute('style','overflow:hidden !important')
-      })
-    }
+    document.getElementById('headerTitle').click();
   }
 
   public logOut() : void {

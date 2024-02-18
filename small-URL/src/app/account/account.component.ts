@@ -67,6 +67,7 @@ export class AccountComponent implements OnInit {
         .then((data : UserDetailsSimple) => { 
           if(data){
             this.displayGrid = true;
+            data.createdAt = new Date(data.createdAt).toUTCString();
             data.clicksPerday.forEach((c : ClicksPerDay) => {
               c.date = new Date(c.date).toUTCString();
             });

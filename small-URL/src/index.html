@@ -9,5 +9,26 @@
 </head>
 <body>
   <app-root></app-root>
+  <input id="grecaptchaId" type="hidden"/>
+  <script>
+    var grecaptchaId;
+    var errorHandling = function(err) { console.err('reCAPTCHA Error:', err) }
+    var onloadCallback = function() {
+      grecaptchaId = grecaptcha.render(document.getElementById('myRecaptchaElement'), {
+        'sitekey' : '6Lfu8ispAAAAAD5N6szlCM90vu0GBAmhUehMqsZ2',
+        'size': 'invisible',
+        'error-callback': errorHandling,
+      });
+      document.getElementById('grecaptchaId').value = grecaptchaId;
+      var refreshId = setInterval(function() {
+        if (window['grecaptchaIdChange']) {
+          grecaptchaIdChange();
+          clearInterval(refreshId);
+        }
+      }, 1000);
+    };
+  </script>
+  <script src="https://www.google.com/recaptcha/api.js?render=APIKEY&onload=onloadCallback" async defer></script>
+  <div id="myRecaptchaElement"></div>
 </body>
 </html>

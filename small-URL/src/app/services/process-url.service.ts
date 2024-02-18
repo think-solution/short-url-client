@@ -2,19 +2,24 @@ import { Injectable } from '@angular/core';
 import { URL_CONSTANTS } from '../shared/URLConstants';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { GeneratedSmallUrl } from '../processor/generated-url';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProcessURLService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private loginService: LoginService) { }
 
   public generateSmallURL(url : string) : Promise<GeneratedSmallUrl>{
     const endpointUrl = URL_CONSTANTS.baseURL + URL_CONSTANTS.addUrl;
     const payload = {'url' : url};
     const jwt = localStorage.getItem('jwt');
     const headers = new HttpHeaders().set('Content-Type','application/json').set('Authorization', 'Bearer ' + jwt);
+    const token = this.loginService.executeRecaptcha();
+    if(token) {
+      headers.set('g-recaptcha-token',token);
+    }
     if(!jwt){
       headers.delete('Authorization');
     }
