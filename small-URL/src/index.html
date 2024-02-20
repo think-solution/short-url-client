@@ -27,6 +27,16 @@
         }
       }, 1000);
     };
+    var execRecaptcha = async function() {
+      await grecaptcha.execute(grecaptchaId, {action: 'create_url'}).then(function(token) {
+        window.localStorage.setItem('token', token);
+      }).catch(function(err) {
+        console.error('There was an error executing recaptcha.');
+        window.localStorage.removeItem('token');
+        throw err;
+      })
+    }
+    window.execRecaptcha =  execRecaptcha;
   </script>
   <script src="https://www.google.com/recaptcha/api.js?render=APIKEY&onload=onloadCallback" async defer></script>
   <div id="myRecaptchaElement"></div>

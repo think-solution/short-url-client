@@ -11,19 +11,27 @@ export class ProcessURLService {
 
   constructor(private http: HttpClient, private loginService: LoginService) { }
 
-  public generateSmallURL(url : string) : Promise<GeneratedSmallUrl>{
+  public async generateSmallURL(url : string) : Promise<GeneratedSmallUrl>{
     const endpointUrl = URL_CONSTANTS.baseURL + URL_CONSTANTS.addUrl;
     const payload = {'url' : url};
     const jwt = localStorage.getItem('jwt');
-    const headers = new HttpHeaders().set('Content-Type','application/json').set('Authorization', 'Bearer ' + jwt);
-    const token = this.loginService.executeRecaptcha();
-    if(token) {
-      headers.set('g-recaptcha-token',token);
-    }
+    var token = undefined;
+
+    await this.loginService.executeRecaptcha().then(() => {
+      token = localStorage.getItem('token');
+    }).catch((e) => {
+      console.error('An error occured', e);
+      return new Promise((resolve, reject) => {reject(e);});
+    });
+    
+    const headers = new HttpHeaders().set('Content-Type','application/json').set('Authorization', 'Bearer ' + jwt).set('g-recaptcha-token',token);
     if(!jwt){
       headers.delete('Authorization');
     }
     return new Promise((resolve,reject) => {
+      if(!token) {
+        reject();
+      }
       this.http.post(endpointUrl, payload, {headers:headers})
       .subscribe({
         next:((res : GeneratedSmallUrl) => {
@@ -32,10 +40,11 @@ export class ProcessURLService {
           } else {
             reject();
           }
-          console.log('KutieURL generated successfully.');
+          localStorage.removeItem('token');
         }),
         error: ((err) => {
           console.log('Error generating KutieURL.');
+          localStorage.removeItem('token');
           reject();
         })
       })
