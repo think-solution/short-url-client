@@ -7,6 +7,7 @@ import { URL_CONSTANTS } from '../shared/URLConstants';
 import { ProcessURLService } from '../services/process-url.service';
 import { UserDetailsSimple } from '../shared/url-details-simple';
 import { ClicksPerDay } from '../shared/clicks-per-day';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -17,6 +18,7 @@ export class AccountComponent implements OnInit {
   //Common
   loggedIn : boolean = false;
   displayGrid : boolean = false;
+  token : string = undefined;
 
 
   //Non-login mode
@@ -29,20 +31,25 @@ export class AccountComponent implements OnInit {
   userURLDataColumns: string[] = ['position', 'date', 'deviceType', 'client', 'ip', 'location', 'coordinates'];
   userAnalyticsData = {};
 
-  constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar, private loginService : LoginService, private processURLService : ProcessURLService) { }
+  constructor(private urlDataService : URLDataService, public snackBar: MatSnackBar
+    , private loginService : LoginService, private processURLService : ProcessURLService
+    , private recaptchaV3Service: ReCaptchaV3Service) { }
 
   async ngOnInit(): Promise<void> {
-    await this.loginService.checkLogin().then((data : UserDetails) => {
-      if(data){
-        this.loggedIn = true;
-        this.getUrlDetails();
-      } else {
-      this.loggedIn = false;
-      }
-      return data;
-    }).catch((err) => {
-      console.log('An error has occured.');
-      this.loggedIn = false;
+    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+      this.token = token;
+      await this.loginService.checkLogin(token).then((data : UserDetails) => {
+        if(data){
+          this.loggedIn = true;
+          this.getUrlDetails();
+        } else {
+        this.loggedIn = false;
+        }
+        return data;
+      }).catch((err) => {
+        console.log('An error has occured.');
+        this.loggedIn = false;
+      });
     });
   }
 
@@ -63,7 +70,7 @@ export class AccountComponent implements OnInit {
       } else if(this.url.startsWith(URL_CONSTANTS.kutieURLBase)){
         let urlArray = this.url.split('/');
         let shortCode = urlArray[urlArray.length - 1];
-        this.urlData = await this.urlDataService.getUrlDetailsSimple(shortCode)
+        this.urlData = await this.urlDataService.getUrlDetailsSimple(shortCode, this.token)
         .then((data : UserDetailsSimple) => { 
           if(data){
             this.displayGrid = true;
@@ -92,11 +99,11 @@ export class AccountComponent implements OnInit {
 
   public async getUrlDetails(){
     this.displayGrid = true;
-    this.userURLData = await this.urlDataService.getUserUrls();
+    this.userURLData = await this.urlDataService.getUserUrls(this.token);
   }
 
   public async getAnalyticsData(id : number){
-    this.userAnalyticsData = await this.urlDataService.getUserIdDetails(id);
+    this.userAnalyticsData = await this.urlDataService.getUserIdDetails(id, this.token);
   }
 
   public downloadData(id : number){

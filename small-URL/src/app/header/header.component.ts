@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../services/login.service';
 import { UserDetails } from '../shared/user-details';
 import { Router } from '@angular/router';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
-declare global {
-  interface Window { execRecaptcha: any; }
-}
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,22 +15,12 @@ export class HeaderComponent implements OnInit {
   loggedIn : boolean = false;
   loginChecked : boolean = false;
 
-  constructor(private loginService : LoginService, public router : Router) {
-    window['grecaptchaIdChange'] = () =>  this.grecaptchaIdChange();
+  constructor(private loginService : LoginService, public router : Router, private recaptchaV3Service: ReCaptchaV3Service) {
   }
 
-  ngOnInit(): void {
-  }
-
-  public async grecaptchaIdChange() {
-    var grecaptchaId = (<HTMLInputElement>document.getElementById('grecaptchaId')).value;
-    if(grecaptchaId){
-      await this.loginService.setGrecaptchaId(grecaptchaId);
-    }
-
-    let shortCode = localStorage.getItem('shortCode'); //To check if the call is from a redirect flow. If shortCode is present, do nothing and just redirect.
-    if(!shortCode) {
-      await this.loginService.checkLogin().then((data : UserDetails) => {
+  async ngOnInit(): Promise<void> {
+    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+      await this.loginService.checkLogin(token).then((data : UserDetails) => {
         if(data){
           this.userFirstName = data.firstName;
           this.loggedIn = true;
@@ -41,17 +29,20 @@ export class HeaderComponent implements OnInit {
           this.loggedIn = false;
         }
       }).catch((err) => {
+        console.log(err);
         console.log('An error has occured.');
         this.userFirstName = '';
         this.loggedIn = false;
       });
-      document.getElementById('headerTitle').click();
-    }
+    });
   }
 
-  public logOut() : void {
+  public async logOut() : Promise<void> {
     this.loginService.logOut();
-    var loginInfo = this.loginService.checkLogin();
+    var loginInfo = undefined;
+    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+      loginInfo = this.loginService.checkLogin(token);
+    });
     this.loggedIn = loginInfo ? true : false;
   }
 

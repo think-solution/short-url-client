@@ -8,104 +8,72 @@ import { LoginService } from './login.service';
 })
 export class URLDataService {
 
-  constructor(private http: HttpClient, private loginService : LoginService) { }
+  constructor(private http: HttpClient) { }
 
-  public async getUrlDetailsSimple(shortCode : string) : Promise<{}> {
+  public async getUrlDetailsSimple(shortCode : string, token : string) : Promise<any> {
     const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.analyticsInfo + shortCode;
-    var token = undefined;
-
-    await this.loginService.executeRecaptcha().then(() => {
-      token = localStorage.getItem('token');
-    }).catch((e) => {
-      console.error('An error occured', e);
-      return new Promise((resolve, reject) => {reject(e);});
-    });
     const headers = new HttpHeaders().set('Content-Type','application.json').set('g-recaptcha-token',token);
     
-    return new Promise((resolve, reject) => {
-      if(!token) {
-        reject();
-      }
-      this.http.get(url, {headers:headers})
-      .subscribe({
-        next:((res) => {
-          console.log('Simple URL details fetched successfully.');
-          localStorage.removeItem('token');
-          resolve(res);
-        }),
-        error: ((err) => {
-          console.log('Error getting simple URL details');
-          localStorage.removeItem('token');
+      return new Promise((resolve, reject) => {
+        if(!token) {
           reject();
+        }
+        this.http.get(url, {headers:headers})
+        .subscribe({
+          next:((res) => {
+            console.log('Simple URL details fetched successfully.');
+            resolve(res);
+          }),
+          error: ((err) => {
+            console.log('Error getting simple URL details');
+            reject();
+          })
         })
-      })
-    });
+      });
   }
 
-  public async getUserUrls() : Promise<[]> {
+  public async getUserUrls(token : string) : Promise<any> {
     const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.listUrl;
     const jwt = localStorage.getItem('jwt');
-    var token = undefined;
-
-    await this.loginService.executeRecaptcha().then(() => {
-      token = localStorage.getItem('token');
-    }).catch((e) => {
-      console.error('An error occured', e);
-      return new Promise((resolve, reject) => {reject(e);});
-    });
-
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + jwt).set('g-recaptcha-token',token);
-    return new Promise((resolve,reject) => {
-      if(!jwt || !token){
-        reject();
-      }
-      this.http.get(url, {headers:headers})
-      .subscribe({
-        next:((res : []) => {
-          console.log('User URLs fetched successfully.');
-          localStorage.removeItem('token');
-          resolve(res);
-        }),
-        error: ((err) => {
-          console.log('Error getting user URLs');
-          localStorage.removeItem('token');
+      return new Promise((resolve,reject) => {
+        if(!jwt || !token){
           reject();
+        }
+        this.http.get(url, {headers:headers})
+        .subscribe({
+          next:((res : []) => {
+            console.log('User URLs fetched successfully.');
+            resolve(res);
+          }),
+          error: ((err) => {
+            console.log('Error getting user URLs');
+            reject();
+          })
         })
       })
-    })
   }
 
-  public async getUserIdDetails(id : number) : Promise<{}> {
+  public async getUserIdDetails(id : number, token : string) : Promise<any> {
     const url = URL_CONSTANTS.baseURL + URL_CONSTANTS.analytics + id;
     const jwt = localStorage.getItem('jwt');
-    var token = undefined;
-
-    await this.loginService.executeRecaptcha().then(() => {
-      token = localStorage.getItem('token');
-    }).catch((e) => {
-      console.error('An error occured', e);
-      return new Promise((resolve, reject) => {reject(e);});
-    });
-    
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + jwt).set('g-recaptcha-token',token);
-    return new Promise((resolve,reject) => {
-      if(!jwt || !token){
-        reject();
-      }
-      this.http.get(url, {headers:headers})
-      .subscribe({
-        next:((res) => {
-          console.log('User URLs fetched successfully.');
-          localStorage.removeItem('token');
-          resolve(res);
-        }),
-        error: ((err) => {
-          console.log('Error getting user URLs.');
-          localStorage.removeItem('token');
+      return new Promise((resolve,reject) => {
+        if(!jwt || !token){
           reject();
+        }
+        this.http.get(url, {headers:headers})
+        .subscribe({
+          next:((res) => {
+            console.log('User URLs fetched successfully.');
+            resolve(res);
+          }),
+          error: ((err) => {
+            console.log('Error getting user URLs.');
+            reject();
+          })
         })
       })
-    })
   }
 
   public downloadData(id : number) : void {

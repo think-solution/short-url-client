@@ -12,25 +12,25 @@
             <mat-list-item *ngIf="!loggedIn">
                 <button mat-raised-button color="accent" routerLink="login">
                     <mat-icon>account_box</mat-icon>
-                    <span>Sign-in with Google</span>
+                    <span class="menuText">Sign-in with Google</span>
                 </button>
             </mat-list-item>
             <mat-list-item  *ngIf="this.router.url !== '/'">
                 <button mat-raised-button color="accent" routerLink="">
                     <mat-icon>home</mat-icon>
-                    <span>Home</span>
+                    <span class="menuText">Home</span>
                 </button>
             </mat-list-item>
             <mat-list-item *ngIf="this.router.url !== '/account'">
                 <button mat-raised-button color="accent" routerLink="account">
                     <mat-icon>assessment</mat-icon>
-                    <span>View Details</span>
+                    <span class="menuText">View Details</span>
                 </button>
             </mat-list-item>
             <mat-list-item *ngIf="loggedIn">
                 <button mat-raised-button color="accent" (click)="logOut()">
                     <mat-icon>input</mat-icon>
-                    <span> Logout</span>
+                    <span class="menuText"> Logout</span>
                 </button>
             </mat-list-item>
           </mat-list>

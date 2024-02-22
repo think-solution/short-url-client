@@ -3,6 +3,7 @@ import { URL_CONSTANTS } from './shared/URLConstants';
 import { ProcessURLService } from './services/process-url.service';
 import { Router } from '@angular/router';
 import { URLDataService } from './services/urldata.service';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-root',
@@ -13,27 +14,29 @@ export class AppComponent {
   title = 'small-URL';
   displayContent : boolean = false;
 
-constructor(private router : Router, private urlDataService : URLDataService, private processUrlService : ProcessURLService) {
+constructor(public router : Router, private urlDataService : URLDataService, private processUrlService : ProcessURLService, private recaptchaV3Service: ReCaptchaV3Service) {
   this.displayContent = localStorage.getItem('displayContent') === 'true';
   let shortCode = localStorage.getItem('shortCode');
   if(shortCode){
-    urlDataService.getUrlDetailsSimple(shortCode).then((data) => {
-      if(data){
-        localStorage.removeItem('shortCode');
-        localStorage.setItem('displayContent', 'true');
-        processUrlService.redirect(shortCode);
-      } else {
+    this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+      urlDataService.getUrlDetailsSimple(shortCode, token).then((data) => {
+        if(data){
+          localStorage.removeItem('shortCode');
+          localStorage.setItem('displayContent', 'true');
+          processUrlService.redirect(shortCode);
+        } else {
+          console.error('Could not find the path specified.');
+          localStorage.removeItem('shortCode');
+          localStorage.setItem('displayContent', 'true');
+          window.location.href = URL_CONSTANTS.kutieURLBase;
+        }
+      }).catch((e) => {
         console.error('Could not find the path specified.');
         localStorage.removeItem('shortCode');
         localStorage.setItem('displayContent', 'true');
         window.location.href = URL_CONSTANTS.kutieURLBase;
-      }
-    }).catch((e) => {
-      console.error('Could not find the path specified.');
-      localStorage.removeItem('shortCode');
-      localStorage.setItem('displayContent', 'true');
-      window.location.href = URL_CONSTANTS.kutieURLBase;
-      });
+        });
+    });
     } else {
       this.displayContent = true;
     }

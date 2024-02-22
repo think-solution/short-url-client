@@ -1,2 +1,2 @@
-<app-header *ngIf="displayContent"></app-header>
+<app-header *ngIf="displayContent && this.router.url !== '/login'"></app-header>
 <router-outlet *ngIf="displayContent"></router-outlet>

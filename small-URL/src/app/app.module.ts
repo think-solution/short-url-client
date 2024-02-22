@@ -20,6 +20,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
+import { RECAPTCHA_V3_SITE_KEY, RecaptchaV3Module } from 'ng-recaptcha';
+import { environment } from 'src/environments/environment.prod';
 
 @NgModule({
   declarations: [
@@ -44,9 +46,13 @@ import { HeaderComponent } from './header/header.component';
     MatSnackBarModule,
     MatTableModule,
     MatTooltipModule,
-    FormsModule
+    FormsModule,
+    RecaptchaV3Module
   ],
-  providers: [],
+  providers: [{
+    provide: RECAPTCHA_V3_SITE_KEY,
+    useValue: environment.recaptcha.siteKey,
+  },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

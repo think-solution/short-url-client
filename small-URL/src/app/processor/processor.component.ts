@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ProcessURLService } from '../services/process-url.service';
 import { GeneratedSmallUrl } from './generated-url';
-import { timeInterval } from 'rxjs';
+import { ReCaptchaV3Service } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-processor',
@@ -16,10 +16,14 @@ export class ProcessorComponent implements OnInit {
   errorMsg = '';
   smallURL = '';
   displayURL = '';
+  token : string = 'undefined';
 
-  constructor(public snackBar: MatSnackBar, private processURLService : ProcessURLService, private clipboard : Clipboard) { }
+  constructor(public snackBar: MatSnackBar, private processURLService : ProcessURLService, private clipboard : Clipboard, private recaptchaV3Service: ReCaptchaV3Service) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+      this.token = token;
+    });
   }
 
   shortenUrl(){
@@ -30,7 +34,7 @@ export class ProcessorComponent implements OnInit {
       this.errorMsg="Check the format of the entered URL. Be sure to include the protocol: 'http or https'";
       this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
     } else {
-      this.processURLService.generateSmallURL(this.url).then((retVal : GeneratedSmallUrl) => {
+      this.processURLService.generateSmallURL(this.url, this.token).then((retVal : GeneratedSmallUrl) => {
         this.smallURL = retVal.callUrl;
         this.displayURL = this.url;
         this.url = '';
@@ -45,7 +49,3 @@ export class ProcessorComponent implements OnInit {
 
   
 }
-
-// Use Snackbar instead of dialog
-// Check is Axios is available for Angular
-// Check if google(whatsapp) URL is redirecting to google using Axios
