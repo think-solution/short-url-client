@@ -39,8 +39,8 @@ export class ProcessURLService {
       });
   }
 
-  public redirect(shortCode : string) {
-    window.location.href = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode;
+  public redirect(shortCode : string, token : string) {
+    window.location.href = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode + '?g-recaptcha-token=' + token;
   }
 
   public checkHttpUrl(url : string) {

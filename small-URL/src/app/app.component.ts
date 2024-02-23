@@ -23,7 +23,7 @@ constructor(public router : Router, private urlDataService : URLDataService, pri
         if(data){
           localStorage.removeItem('shortCode');
           localStorage.setItem('displayContent', 'true');
-          processUrlService.redirect(shortCode);
+          processUrlService.redirect(shortCode, token);
         } else {
           console.error('Could not find the path specified.');
           localStorage.removeItem('shortCode');
