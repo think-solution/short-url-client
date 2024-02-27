@@ -40,7 +40,7 @@ export class ProcessURLService {
   }
 
   public redirect(shortCode : string, token : string) {
-    window.location.href = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode + '?g-recaptcha-token=' + token;
+    window.location.href = URL_CONSTANTS.baseURL + URL_CONSTANTS.urlManagement + shortCode + '?recaptcha=' + token;
   }
 
   public checkHttpUrl(url : string) {
