@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+    await this.recaptchaV3Service.execute('check_login').subscribe(async (token : string) => {
       await this.loginService.checkLogin(token).then((data : UserDetails) => {
         if(data){
           this.userFirstName = data.firstName;
@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
   public async logOut() : Promise<void> {
     this.loginService.logOut();
     var loginInfo = undefined;
-    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+    await this.recaptchaV3Service.execute('check_login').subscribe(async (token : string) => {
       loginInfo = this.loginService.checkLogin(token);
     });
     this.loggedIn = loginInfo ? true : false;

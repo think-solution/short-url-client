@@ -18,7 +18,6 @@ export class AccountComponent implements OnInit {
   //Common
   loggedIn : boolean = false;
   displayGrid : boolean = false;
-  token : string = undefined;
 
 
   //Non-login mode
@@ -36,12 +35,11 @@ export class AccountComponent implements OnInit {
     , private recaptchaV3Service: ReCaptchaV3Service) { }
 
   async ngOnInit(): Promise<void> {
-    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
-      this.token = token;
+    await this.recaptchaV3Service.execute('check_login').subscribe(async (token : string) => {
       await this.loginService.checkLogin(token).then((data : UserDetails) => {
         if(data){
           this.loggedIn = true;
-          this.getUrlDetails();
+          this.getUserUrls();
         } else {
         this.loggedIn = false;
         }
@@ -70,21 +68,23 @@ export class AccountComponent implements OnInit {
       } else if(this.url.startsWith(URL_CONSTANTS.kutieURLBase)){
         let urlArray = this.url.split('/');
         let shortCode = urlArray[urlArray.length - 1];
-        this.urlData = await this.urlDataService.getUrlDetailsSimple(shortCode, this.token)
-        .then((data : UserDetailsSimple) => { 
-          if(data){
-            this.displayGrid = true;
-            data.createdAt = new Date(data.createdAt).toUTCString();
-            data.clicksPerday.forEach((c : ClicksPerDay) => {
-              c.date = new Date(c.date).toUTCString();
-            });
-            return data;
-          }
-        }).catch((err) => {
-          this.displayGrid = false;
-          errorMsg='Error occured while fetching URL data. Please try again.';
-          this.snackBar.open(errorMsg, 'close', {duration: 3000});
-          return {};
+        await this.recaptchaV3Service.execute('get_url_details_simple').subscribe(async (token : string) => {
+          this.urlData = await this.urlDataService.getUrlDetailsSimple(shortCode, token)
+          .then((data : UserDetailsSimple) => { 
+            if(data){
+              this.displayGrid = true;
+              data.createdAt = new Date(data.createdAt).toUTCString();
+              data.clicksPerday.forEach((c : ClicksPerDay) => {
+                c.date = new Date(c.date).toUTCString();
+              });
+              return data;
+            }
+          }).catch((err) => {
+            this.displayGrid = false;
+            errorMsg='Error occured while fetching URL data. Please try again.';
+            this.snackBar.open(errorMsg, 'close', {duration: 3000});
+            return {};
+          });
         });
         if(!this.urlData){
           errorMsg='Could not find any data for the URL provided'
@@ -97,13 +97,17 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  public async getUrlDetails(){
+  public async getUserUrls(){
     this.displayGrid = true;
-    this.userURLData = await this.urlDataService.getUserUrls(this.token);
+    await this.recaptchaV3Service.execute('get_user_urls').subscribe(async (token : string) => {
+      this.userURLData = await this.urlDataService.getUserUrls(token);
+    });
   }
 
   public async getAnalyticsData(id : number){
-    this.userAnalyticsData = await this.urlDataService.getUserIdDetails(id, this.token);
+    await this.recaptchaV3Service.execute('get_analytics_data').subscribe(async (token : string) => {
+      this.userAnalyticsData = await this.urlDataService.getUserIdDetails(id, token);
+    });
   }
 
   public downloadData(id : number){

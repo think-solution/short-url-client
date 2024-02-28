@@ -18,12 +18,14 @@ constructor(public router : Router, private urlDataService : URLDataService, pri
   this.displayContent = localStorage.getItem('displayContent') === 'true';
   let shortCode = localStorage.getItem('shortCode');
   if(shortCode){
-    this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+    this.recaptchaV3Service.execute('get_url_details_simple').subscribe(async (token : string) => {
       urlDataService.getUrlDetailsSimple(shortCode, token).then((data) => {
         if(data){
           localStorage.removeItem('shortCode');
           localStorage.setItem('displayContent', 'true');
-          processUrlService.redirect(shortCode, token);
+          this.recaptchaV3Service.execute('redirect').subscribe(async (token : string) => {
+            processUrlService.redirect(shortCode, token);
+          });
         } else {
           console.error('Could not find the path specified.');
           localStorage.removeItem('shortCode');

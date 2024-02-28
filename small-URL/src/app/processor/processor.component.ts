@@ -16,17 +16,13 @@ export class ProcessorComponent implements OnInit {
   errorMsg = '';
   smallURL = '';
   displayURL = '';
-  token : string = 'undefined';
 
   constructor(public snackBar: MatSnackBar, private processURLService : ProcessURLService, private clipboard : Clipboard, private recaptchaV3Service: ReCaptchaV3Service) { }
 
-  async ngOnInit(): Promise<void> {
-    await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
-      this.token = token;
-    });
+  ngOnInit(): void {
   }
 
-  shortenUrl(){
+  async shortenUrl(){
     if(this.url === '') {
       this.errorMsg='Please enter a URL to continue.'
       this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
@@ -34,15 +30,17 @@ export class ProcessorComponent implements OnInit {
       this.errorMsg="Check the format of the entered URL. Be sure to include the protocol: 'http or https'";
       this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
     } else {
-      this.processURLService.generateSmallURL(this.url, this.token).then((retVal : GeneratedSmallUrl) => {
-        this.smallURL = retVal.callUrl;
-        this.displayURL = this.url;
-        this.url = '';
-        this.clipboard.copy(retVal.callUrl);
-        this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000});
-      }).catch((e)=>{
-        this.errorMsg='An unfortunate error occured generating the URL.'
-        this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
+      await this.recaptchaV3Service.execute('create_url').subscribe(async (token : string) => {
+        this.processURLService.generateSmallURL(this.url, token).then((retVal : GeneratedSmallUrl) => {
+          this.smallURL = retVal.callUrl;
+          this.displayURL = this.url;
+          this.url = '';
+          this.clipboard.copy(retVal.callUrl);
+          this.snackBar.open('URL copied to clipboard', 'close', {duration: 3000});
+        }).catch((e)=>{
+          this.errorMsg='An unfortunate error occured generating the URL.'
+          this.snackBar.open(this.errorMsg, 'close', {duration: 3000});
+        });
       });
     }
   }
