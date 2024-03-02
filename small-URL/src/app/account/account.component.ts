@@ -73,23 +73,21 @@ export class AccountComponent implements OnInit {
           .then((data : UserDetailsSimple) => { 
             if(data){
               this.displayGrid = true;
-              data.createdAt = new Date(data.createdAt).toUTCString();
+              data.createdAt = new Date(data.createdAt).toString();
               data.clicksPerday.forEach((c : ClicksPerDay) => {
-                c.date = new Date(c.date).toUTCString();
+                let tempDate = new Date(c.date);
+                const milliseconds = 10 * 1000;
+                c.date = new Date(tempDate.getTime() + milliseconds).toString();
               });
               return data;
             }
           }).catch((err) => {
             this.displayGrid = false;
-            errorMsg='Error occured while fetching URL data. Please try again.';
+            errorMsg='Error occured while fetching URL data. Please check the URL and try again.';
             this.snackBar.open(errorMsg, 'close', {duration: 3000});
             return {};
           });
         });
-        if(!this.urlData){
-          errorMsg='Could not find any data for the URL provided'
-          this.snackBar.open(errorMsg, 'close', {duration: 3000});
-        }
       } else {
         errorMsg='Incorrect URL provided. Please try again.'
           this.snackBar.open(errorMsg, 'close', {duration: 3000});
